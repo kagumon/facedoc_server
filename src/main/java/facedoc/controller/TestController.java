@@ -1,5 +1,8 @@
 package facedoc.controller;
 
+import facedoc.service.sck.dto.SCK0001S01IN;
+import facedoc.service.sck.dto.SCK0001S01OUT;
+import facedoc.service.sck.impl.SCK0001ServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,21 +12,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("/test")
 public class TestController {
-
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String testScreen(HttpServletRequest request, Model model) throws Exception {
-        /* 사용할 서비스와 뷰 지정 */
-        String service_name = "ZET/";
-        String view_name = "ZET0001M01";
+    public String dataPrintTest(HttpServletRequest request, Model model) throws Exception {
+        SCK0001S01IN in = new SCK0001S01IN();
+        SCK0001S01OUT out = new SCK0001S01OUT();
+        SCK0001ServiceImpl service = new SCK0001ServiceImpl();
 
-        /* 로깅 */
-        
-        /* jsp에 넘길 데이터 입력 */
-        request.setAttribute("data", 5);
-        
-        /* session에 값 입력 */
-        // 작성 필요
-        
-        return service_name + view_name;
+        in.setSocketId("test");
+
+        service.SCK0001S01(in, out);
+
+        request.setAttribute("data", out.getSocketId());
+        return "ZET/ZET0001M01";
     }
 }
