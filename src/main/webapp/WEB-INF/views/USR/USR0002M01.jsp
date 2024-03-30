@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
-    String uuid = (String)request.getAttribute("uuid");
+    String uuid = (String)session.getAttribute("uuid");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,40 +23,41 @@
 
             stompClient.connect({}, function () {
                 console.log('Connected to WebRTC server');
-
-                stompClient.subscribe(`/topic/call/key`, message =>{
-                    stompClient.send(`/app/send/key`, {}, JSON.stringify(myKey));
-                });
-
                 stompClient.subscribe(`/topic/send/key`, message => {
                     const key = JSON.parse(message.body);
-                    if(otherKeyList.includes(key)) {
-                        console.log("already key");
-                        return;
-                    } else if(myKey !== key && otherKeyList.find((mapKey) => mapKey === myKey) === undefined){
+                    if(myKey !== key && otherKeyList.find((mapKey) => mapKey === myKey) === undefined && !otherKeyList.includes(key)){
                         otherKeyList.push(key);
-                        $("#doctor-list").append("<li>"+key+"</li>");
+                        $("#doctor-list").append("<li class='doctor-li' id='" + key + "'>" + key + "와 연결하기</li>\n");
                     }
-
-                    console.log(otherKeyList);
                 });
+
+                stompClient.subscribe('/topic/peer/res/' + myKey, message => {
+                    console.log(message.body=="1");
+                });
+
+                stompClient.send("/app/call/key", {}, {});
             });
         }
 
-        const sendKey = async () => {
-            await stompClient.send("/app/call/key", {}, {});
-        }
-
         $("document").ready(() => {
-            $("#send-key").on("click", sendKey);
             connectSocket();
+            $(document).on('click', '.doctor-li', (e) => {
+                stompClient.send("/app/peer/req/" + e.target.id, {}, myKey);
+            });
         });
     </script>
+
+    <style>
+        li {
+            background-color: aqua;
+        }
+    </style>
 </head>
 <body>
-    <div id="send-key" style="background-color: olivedrab">로그인하기</div>
-    <h1>의사 순서</h1>
-    <ol id="doctor-list">
-    </ol>
+<h1>환자 화면</h1>
+<h3>나의 session ID : (<%=uuid%>)</h3>
+<h3>의사 순서</h3>
+<ol id="doctor-list">
+</ol>
 </body>
 </html>
