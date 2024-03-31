@@ -15,6 +15,7 @@
         let localStreamElement = document.querySelector('#localStream');
         let otherKeyList = [];
         const myKey = "<%=uuid%>";
+        let d_key = null;
 
         const connectSocket = async () =>{
             const socket = new SockJS('/signaling');
@@ -32,7 +33,9 @@
                 });
 
                 stompClient.subscribe('/topic/peer/res/' + myKey, message => {
-                    console.log(message.body=="1");
+                    if(message.body=="1") {
+                        location.href = "/USR0002M02/" + d_key;
+                    }
                 });
 
                 stompClient.send("/app/call/key", {}, {});
@@ -42,6 +45,7 @@
         $("document").ready(() => {
             connectSocket();
             $(document).on('click', '.doctor-li', (e) => {
+                d_key=e.target.id;
                 stompClient.send("/app/peer/req/" + e.target.id, {}, myKey);
             });
         });

@@ -33,32 +33,29 @@ public class SocketController {
 
     //offer 정보를 주고 받기 위한 websocket
     //camKey : 각 요청하는 캠의 key , roomId : 룸 아이디
-    @MessageMapping("/peer/offer/{camKey}/{roomId}")
-    @SendTo("/topic/peer/offer/{camKey}/{roomId}")
+    @MessageMapping("/peer/offer/{uuid}")
+    @SendTo("/topic/peer/offer/{uuid}")
     public String PeerHandleOffer(@Payload String offer,
-                                  @DestinationVariable(value = "roomId") String roomId,
-                                  @DestinationVariable(value = "camKey") String camKey) {
-        log.info("[OFFER] {} : {}", camKey, offer);
+                                  @DestinationVariable(value = "uuid") String uuid) {
+        log.info("[OFFER] {} : {}", uuid, offer);
         return offer;
     }
 
     //iceCandidate 정보를 주고 받기 위한 webSocket
     //camKey : 각 요청하는 캠의 key , roomId : 룸 아이디
-    @MessageMapping("/peer/iceCandidate/{camKey}/{roomId}")
-    @SendTo("/topic/peer/iceCandidate/{camKey}/{roomId}")
+    @MessageMapping("/peer/iceCandidate/{uuid}")
+    @SendTo("/topic/peer/iceCandidate/{uuid}")
     public String PeerHandleIceCandidate(@Payload String candidate,
-                                         @DestinationVariable(value = "roomId") String roomId,
-                                         @DestinationVariable(value = "camKey") String camKey) {
-        log.info("[ICECANDIDATE] {} : {}", camKey, candidate);
+                                         @DestinationVariable(value = "uuid") String uuid) {
+        log.info("[ICECANDIDATE] {} : {}", uuid, candidate);
         return candidate;
     }
 
-    @MessageMapping("/peer/answer/{camKey}/{roomId}")
-    @SendTo("/topic/peer/answer/{camKey}/{roomId}")
+    @MessageMapping("/peer/answer/{uuid}")
+    @SendTo("/topic/peer/answer/{uuid}")
     public String PeerHandleAnswer(@Payload String answer,
-                                   @DestinationVariable(value = "roomId") String roomId,
-                                   @DestinationVariable(value = "camKey") String camKey) {
-        log.info("[ANSWER] {} : {}", camKey, answer);
+                                   @DestinationVariable(value = "uuid") String uuid) {
+        log.info("[ANSWER] {} : {}", uuid, answer);
         return answer;
     }
 
@@ -85,8 +82,8 @@ public class SocketController {
 public class SocketController {
     //offer 정보를 주고 받기 위한 websocket
     //camKey : 각 요청하는 캠의 key , roomId : 룸 아이디
-    @MessageMapping("/peer/offer/{camKey}/{roomId}")
-    @SendTo("/topic/peer/offer/{camKey}/{roomId}")
+    @MessageMapping("/peer/offer/{uuid}")
+    @SendTo("/topic/peer/offer/{uuid}")
     public String PeerHandleOffer(@Payload String offer, @DestinationVariable(value = "roomId") String roomId,
                                   @DestinationVariable(value = "camKey") String camKey) {
         log.info("[OFFER] {} : {}", camKey, offer);
@@ -95,8 +92,8 @@ public class SocketController {
 
     //iceCandidate 정보를 주고 받기 위한 webSocket
     //camKey : 각 요청하는 캠의 key , roomId : 룸 아이디
-    @MessageMapping("/peer/iceCandidate/{camKey}/{roomId}")
-    @SendTo("/topic/peer/iceCandidate/{camKey}/{roomId}")
+    @MessageMapping("/peer/iceCandidate/{uuid}")
+    @SendTo("/topic/peer/iceCandidate/{uuid}")
     public String PeerHandleIceCandidate(@Payload String candidate, @DestinationVariable(value = "roomId") String roomId,
                                          @DestinationVariable(value = "camKey") String camKey) {
         log.info("[ICECANDIDATE] {} : {}", camKey, candidate);
@@ -105,8 +102,8 @@ public class SocketController {
 
     //
 
-    @MessageMapping("/peer/answer/{camKey}/{roomId}")
-    @SendTo("/topic/peer/answer/{camKey}/{roomId}")
+    @MessageMapping("/peer/answer/{uuid}")
+    @SendTo("/topic/peer/answer/{uuid}")
     public String PeerHandleAnswer(@Payload String answer, @DestinationVariable(value = "roomId") String roomId,
                                    @DestinationVariable(value = "camKey") String camKey) {
         log.info("[ANSWER] {} : {}", camKey, answer);

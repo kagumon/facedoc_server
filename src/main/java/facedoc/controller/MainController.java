@@ -14,7 +14,7 @@ public class MainController {
         return "MAN/MAN0001M01";
     }
 
-    @RequestMapping(value = "/screen/{serviceId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/screen/{serviceId}/**", method = RequestMethod.GET)
     public String screenController(HttpServletRequest request,
                                    Model model,
                                    @PathVariable(name="serviceId") String serviceId) throws Exception {
